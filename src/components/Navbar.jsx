@@ -1,6 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+/**
+ * Componente de barra de navegación global
+ * 
+ * Características:
+ * - Navegación entre páginas con React Router
+ * - Resaltado de enlace activo según ruta actual
+ * - Tema claro/oscuro con persistencia en localStorage
+ * - Menú responsive tipo hamburguesa para móvil
+ * - Cierre automático del menú al navegar
+ * 
+ * @component
+ * @returns {JSX.Element} Barra de navegación con logo, enlaces y tema switcher
+ * 
+ * @example
+ * <Navbar />
+ */
 function Navbar() {
   const [theme, setTheme] = useState('light');
   const [menuOpen, setMenuOpen] = useState(false);
