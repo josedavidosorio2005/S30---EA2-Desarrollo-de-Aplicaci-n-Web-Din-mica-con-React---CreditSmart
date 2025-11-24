@@ -18,8 +18,24 @@ import { Link, useLocation } from 'react-router-dom';
  * <Navbar />
  */
 function Navbar() {
+  // ==================== ESTADOS ====================
+  
+  /**
+   * @state {string} theme - Tema actual de la aplicación
+   * @values 'light' | 'dark'
+   * @initialValue 'light' - Tema claro por defecto
+   * @persistence localStorage - Se guarda y recupera del almacenamiento local
+   */
   const [theme, setTheme] = useState('light');
+  
+  /**
+   * @state {boolean} menuOpen - Estado del menú móvil (hamburguesa)
+   * @initialValue false - Menú cerrado por defecto
+   * @updates true al hacer clic en hamburguesa, false al navegar o cerrar
+   */
   const [menuOpen, setMenuOpen] = useState(false);
+  
+  // Hook de React Router para obtener la ubicación actual
   const location = useLocation();
 
   // Cargar tema guardado en localStorage al montar el componente

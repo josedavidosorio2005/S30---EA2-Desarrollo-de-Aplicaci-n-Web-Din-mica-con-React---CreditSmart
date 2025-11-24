@@ -3,13 +3,32 @@ import { useSearchParams } from 'react-router-dom';
 import CreditCard from '../components/CreditCard';
 import { creditsData } from '../data/creditsData';
 
+/**
+ * Página del Simulador de Créditos
+ * Permite buscar y filtrar créditos en tiempo real
+ */
 function Simulator() {
-  // Estados para búsqueda y filtros
+  // ==================== ESTADOS ====================
+  
+  /**
+   * @state {string} searchTerm - Término de búsqueda ingresado por el usuario
+   * @initialValue '' - String vacío, se actualiza con cada tecla
+   */
   const [searchTerm, setSearchTerm] = useState('');
+  
+  /**
+   * @state {string} activeRange - Rango de monto seleccionado ('all', '0-5000000', etc.)
+   * @initialValue 'all' - Muestra todos los créditos por defecto
+   */
   const [activeRange, setActiveRange] = useState('all');
+  
+  /**
+   * @state {Array} filteredCredits - Lista de créditos filtrados según criterios
+   * @initialValue creditsData - Array completo de créditos al inicio
+   */
   const [filteredCredits, setFilteredCredits] = useState(creditsData);
   
-  // Obtener parámetros de la URL
+  // Obtener parámetros de la URL (ej: ?producto=vehiculo)
   const [searchParams] = useSearchParams();
   const preSelectedProduct = searchParams.get('producto');
 

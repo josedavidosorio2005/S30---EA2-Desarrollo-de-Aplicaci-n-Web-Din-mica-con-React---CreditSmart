@@ -2,12 +2,34 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { creditsData, formatMoney, calculateMonthlyPayment } from '../data/creditsData';
 
+/**
+ * Página de Solicitud de Crédito
+ * Formulario controlado con validaciones en tiempo real y cálculo de cuota
+ */
 function RequestCredit() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const preSelectedType = searchParams.get('tipo');
 
-  // Estados del formulario - formulario 100% controlado
+  // ==================== ESTADOS ====================
+  
+  /**
+   * @state {Object} formData - Datos del formulario (11 campos)
+   * @description Formulario 100% controlado con useState
+   * @initialValues {
+   *   nombre: '' - Nombre completo del solicitante
+   *   cedula: '' - Número de cédula
+   *   email: '' - Correo electrónico
+   *   telefono: '' - Número de teléfono
+   *   tipo: preSelectedType || creditsData[0]?.name - Tipo de crédito
+   *   monto: '' - Monto solicitado (formateado como $1.000.000)
+   *   plazo: '12' - Plazo en meses (default 12)
+   *   destino: '' - Descripción del uso del crédito
+   *   empresa: '' - Empresa donde trabaja
+   *   cargo: '' - Cargo laboral
+   *   ingresos: '' - Ingresos mensuales (formateado)
+   * }
+   */
   const [formData, setFormData] = useState({
     nombre: '',
     cedula: '',
@@ -22,10 +44,34 @@ function RequestCredit() {
     ingresos: ''
   });
 
-  // Estados para validaciones en tiempo real
+  /**
+   * @state {Object} errors - Mensajes de error por campo
+   * @initialValue {} - Objeto vacío, se llena en validaciones
+   * @example { nombre: 'El nombre es requerido', email: 'Email inválido' }
+   */
   const [errors, setErrors] = useState({});
+  
+  /**
+   * @state {Object} touched - Campos que el usuario ha visitado
+   * @initialValue {} - Objeto vacío, se marca true al hacer blur
+   * @purpose Validar solo campos que el usuario ya interactuó
+   * @example { nombre: true, email: true, cedula: false }
+   */
   const [touched, setTouched] = useState({});
+  
+  /**
+   * @state {boolean} showModal - Visibilidad del modal de confirmación
+   * @initialValue false - Oculto por defecto
+   * @updates true al enviar formulario válido, false al cerrar
+   */
   const [showModal, setShowModal] = useState(false);
+  
+  /**
+   * @state {number} monthlyPayment - Cuota mensual calculada
+   * @initialValue 0 - Se calcula automáticamente con useEffect
+   * @updates Cuando cambian: monto, plazo o tipo de crédito
+   * @formula Amortización francesa: P * (i * (1 + i)^n) / ((1 + i)^n - 1)
+   */
   const [monthlyPayment, setMonthlyPayment] = useState(0);
 
   // Actualizar tipo si viene en la URL
